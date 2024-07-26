@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # 데이터 불러오기
-file_path = 'path_to_your_file/data_practice.csv'
+file_path = 'data_practice.csv'
 data = pd.read_csv(file_path)
 
 # Streamlit 앱
