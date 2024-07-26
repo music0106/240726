@@ -2,36 +2,36 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load the data
-file_path = 'daily_temp.csv'
+# 데이터 불러오기
+file_path = 'path_to_your_file/daily_temp.csv'
 data = pd.read_csv(file_path)
 
-# Clean the data
+# 데이터 정리
 data.columns = data.columns.str.strip()
 data['날짜'] = data['날짜'].str.strip()
 data['날짜'] = pd.to_datetime(data['날짜'], errors='coerce')
 
-# Extract year from the date
+# 날짜에서 연도 추출
 data['연도'] = data['날짜'].dt.year
 
-# Group by year and calculate the mean, minimum, and maximum temperatures
+# 연도별로 그룹화하여 평균, 최저, 최고 기온 계산
 annual_data = data.groupby('연도').agg({'평균기온(℃)': 'mean', '최저기온(℃)': 'min', '최고기온(℃)': 'max'}).reset_index()
 
-# Streamlit app
-st.title('Annual Temperature Trends')
+# Streamlit 앱
+st.title('연도별 기온 변화 추이')
 
-# Chart selection
-chart_type = st.selectbox('Select chart type:', ['Line Chart', 'Bar Chart'])
+# 차트 선택
+chart_type = st.selectbox('차트 유형 선택:', ['꺾은선 그래프', '막대 그래프'])
 
-# Plotting
-if chart_type == 'Line Chart':
+# 그래프 그리기
+if chart_type == '꺾은선 그래프':
     fig, ax = plt.subplots()
-    ax.plot(annual_data['연도'], annual_data['평균기온(℃)'], label='Average Temperature', marker='o')
-    ax.plot(annual_data['연도'], annual_data['최저기온(℃)'], label='Minimum Temperature', marker='o')
-    ax.plot(annual_data['연도'], annual_data['최고기온(℃)'], label='Maximum Temperature', marker='o')
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Temperature (℃)')
-    ax.set_title('Annual Temperature Trends')
+    ax.plot(annual_data['연도'], annual_data['평균기온(℃)'], label='평균 기온', marker='o')
+    ax.plot(annual_data['연도'], annual_data['최저기온(℃)'], label='최저 기온', marker='o')
+    ax.plot(annual_data['연도'], annual_data['최고기온(℃)'], label='최고 기온', marker='o')
+    ax.set_xlabel('연도')
+    ax.set_ylabel('기온 (℃)')
+    ax.set_title('연도별 기온 변화 추이')
     ax.legend()
     st.pyplot(fig)
 else:
@@ -42,13 +42,13 @@ else:
     r2 = [x + bar_width for x in r1]
     r3 = [x + bar_width for x in r2]
     
-    ax.bar(r1, annual_data['평균기온(℃)'], color='b', width=bar_width, edgecolor='grey', label='Average Temperature')
-    ax.bar(r2, annual_data['최저기온(℃)'], color='g', width=bar_width, edgecolor='grey', label='Minimum Temperature')
-    ax.bar(r3, annual_data['최고기온(℃)'], color='r', width=bar_width, edgecolor='grey', label='Maximum Temperature')
+    ax.bar(r1, annual_data['평균기온(℃)'], color='b', width=bar_width, edgecolor='grey', label='평균 기온')
+    ax.bar(r2, annual_data['최저기온(℃)'], color='g', width=bar_width, edgecolor='grey', label='최저 기온')
+    ax.bar(r3, annual_data['최고기온(℃)'], color='r', width=bar_width, edgecolor='grey', label='최고 기온')
     
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Temperature (℃)')
-    ax.set_title('Annual Temperature Trends')
+    ax.set_xlabel('연도')
+    ax.set_ylabel('기온 (℃)')
+    ax.set_title('연도별 기온 변화 추이')
     ax.set_xticks([r + bar_width for r in range(len(years))])
     ax.set_xticklabels(years, rotation=90)
     ax.legend()
